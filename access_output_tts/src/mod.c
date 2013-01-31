@@ -46,6 +46,13 @@ elm_modapi_init(void *m )
         return ret;
      }
 
+   ret = tts_set_mode(tts, TTS_MODE_SCREEN_READER);
+   if (TTS_ERROR_NONE != ret)
+     {
+        fprintf(stderr, "Fail to set mode : result(%d)", ret);
+        return ret;
+     }
+
    ret = tts_prepare(tts);
    if (TTS_ERROR_NONE != ret)
      {
