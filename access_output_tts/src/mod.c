@@ -57,9 +57,15 @@ elm_modapi_init(void *m )
 
    if (tts)
      {
-        ret = tts_destroy(tts);
-        if (TTS_ERROR_NONE != ret)
-          fprintf(stderr, "Fail to destroy handle : result(%d)", ret);
+        tts_state_e state;
+        tts_get_state(tts, &state);
+
+        if (state == TTS_STATE_CREATED) goto prepare;
+
+        if (state == TTS_STATE_READY ||
+            state == TTS_STATE_PLAYING ||
+            state == TTS_STATE_PAUSED)
+          return;
      }
 
    ret = tts_create(&tts);
@@ -83,6 +89,7 @@ elm_modapi_init(void *m )
         return ret;
      }
 
+ prepare:
    ret = tts_prepare(tts);
    if (TTS_ERROR_NONE != ret)
      {
