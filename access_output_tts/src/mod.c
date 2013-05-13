@@ -6,6 +6,8 @@ export ELM_MODULES="access_output_tts>access/api"
 export ELM_ACCESS_MODE=1
  */
 
+static void (*cb_func) (void *data);
+static void *cb_data;
 static tts_h tts;
 static Eina_Strbuf *buf = NULL;
 
@@ -50,6 +52,11 @@ void _tts_state_changed_cb(tts_h tts, tts_state_e previous, tts_state_e current,
      }
 }
 
+void utterance_completed_callback(tts_h tts, int utt_id, void* user_data)
+{
+   if (cb_func) cb_func(cb_data);
+}
+
 EAPI int
 elm_modapi_init(void *m )
 {
@@ -90,6 +97,13 @@ elm_modapi_init(void *m )
      }
 
  prepare:
+   ret = tts_set_utterance_completed_cb(tts, utterance_completed_callback, NULL);
+   if (TTS_ERROR_NONE != ret)
+     {
+        fprintf(stderr, "Fail to register utterance completed callback function : result(%d)", ret);
+        return ret;
+     }
+
    ret = tts_prepare(tts);
    if (TTS_ERROR_NONE != ret)
      {
@@ -206,6 +220,12 @@ out_cancel(void)
    return;
 }
 
+EAPI void
+out_done_callback_set(void (*func) (void *data), const void *data)
+{
+   cb_func = func;
+   cb_data = (void *)data;
+}
 /*
  * unused api
  */
@@ -214,15 +234,5 @@ out_cancel(void)
 EAPI void
 out_read_done(void)
 {
-}
-
-static void (*cb_func) (void *data);
-static void *cb_data;
-
-EAPI void
-out_done_callback_set(void (*func) (void *data), const void *data)
-{
-   cb_func = func;
-   cb_data = (void *)data;
 }
 #endif
