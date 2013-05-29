@@ -1,6 +1,6 @@
 Name:       elm-modules
 Summary:    The Elementary Modules
-Version:    0.1.1
+Version:    0.1.1r01
 Release:    1
 Group:      System/Libraries
 License:    LGPLv2.1
