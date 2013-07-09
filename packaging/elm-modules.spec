@@ -3,7 +3,7 @@ Summary:    The Elementary Modules
 Version:    0.1.1r02
 Release:    1
 Group:      System/Libraries
-License:    LGPLv2.1
+License:    APLv2
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires: elementary-devel
 BuildRequires: tts-devel
