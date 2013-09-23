@@ -33,7 +33,7 @@ done
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/license
-cp %{_builddir}/%{buildsubdir}/COPYING %{buildroot}/usr/share/license/%{name}
+cp %{_builddir}/%{buildsubdir}/LICENSE %{buildroot}/usr/share/license/%{name}
 
 for FILE in %{DEF_SUBDIRS}
 do
