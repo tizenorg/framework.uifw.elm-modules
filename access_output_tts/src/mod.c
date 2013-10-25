@@ -88,7 +88,7 @@ elm_modapi_init(void *m )
         if (state == TTS_STATE_READY ||
             state == TTS_STATE_PLAYING ||
             state == TTS_STATE_PAUSED)
-          return;
+          return 0;
      }
 
    ret = tts_create(&tts);
