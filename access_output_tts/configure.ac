@@ -20,7 +20,7 @@ AC_C_CONST
 # checks for pkg-config
 PKG_PROG_PKG_CONFIG
 
-requirements="elementary, dlog"
+requirements="elementary, dlog, mm-keysound, vconf"
 
 PKG_CHECK_MODULES(ACCESS_OUTPUT, [${requirements}])
 

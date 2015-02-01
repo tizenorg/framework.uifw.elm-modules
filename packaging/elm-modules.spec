@@ -1,49 +1,56 @@
 Name:       elm-modules
 Summary:    The Elementary Modules
-Version:    0.1.11b01
+Version:    0.1.25
 Release:    1
 Group:      System/Libraries
-License:    APLv2
+License:    LGPLv2.1+
+URL:        http://www.tizen.org
 Source0:    %{name}-%{version}.tar.gz
-BuildRequires: elementary-devel
-BuildRequires: tts-devel
+BuildRequires: elementary-devel, eina-devel, edje-devel
+BuildRequires: tts-devel, libfeedback-devel
+BuildRequires: pkgconfig(mm-keysound)
+BuildRequires: pkgconfig(vconf)
 
 %description
-The Eelementary Modules
+The Elementary Modules
 
 %prep
 %setup -q
 
 %build
+export CFLAGS+=" -fvisibility=hidden -fPIC -Wall"
+export LDFLAGS+=" -fvisibility=hidden -Wl,--hash-style=both -Wl,--as-needed -Wl,-z,defs"
 
-%define DEF_SUBDIRS access_output_tts
-
-export CFLAGS+=" -Wall -g -fPIC -rdynamic"
-export LDFLAGS+=" -Wl,--hash-style=both -Wl,--as-needed -Wl,--rpath=/usr/lib"
-
-%ifarch %{arm}
-export CFLAGS+=" -D_ENV_ARM"
-%endif
-
+%define DEF_SUBDIRS access_output_tts edje_feedback
 for FILE in %{DEF_SUBDIRS}
 do
-        (cd %{_repository} && cd $FILE && ./autogen.sh && ./configure --prefix=/usr && make )
+    cd $FILE
+    if [ -f autogen.sh ]
+    then
+        ./autogen.sh && ./configure --prefix=/usr && make
+    else
+        make
+    fi
+    cd ..
 done
 
 %install
-rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/license
-cp %{_builddir}/%{buildsubdir}/COPYING %{buildroot}/usr/share/license/%{name}
+mkdir -p %{buildroot}/%{_datadir}/license
+cp %{_builddir}/%{buildsubdir}/COPYING %{buildroot}/%{_datadir}/license/%{name}
 
 for FILE in %{DEF_SUBDIRS}
 do
-        (cd %{_repository} && cd $FILE && make install DESTDIR=%{buildroot} )
+        (cd $FILE && PREFIX=%{buildroot}/usr make install DESTDIR=%{buildroot})
 done
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/elementary/modules/*/*/*.so
+%{_libdir}/elementary/modules/*/*/*.so
+%{_libdir}/elementary/modules/*/*/sounds/*
+%{_libdir}/edje/modules/*/*/*.so
+%{_datadir}/license/%{name}
 %manifest %{name}.manifest
-/usr/share/license/%{name}
-
+## Below is not needed except Machintosh
 %exclude /usr/lib/elementary/modules/*/*/*.la
+%exclude /usr/lib/edje/modules/*/*/*.la
+
