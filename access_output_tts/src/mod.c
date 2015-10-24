@@ -59,6 +59,8 @@ static Eina_Bool _text_add(const char *txt)
       return EINA_TRUE;
    }
 
+   if(txt == NULL) return EINA_FALSE;
+
    if (strlen(txt) < TEXT_CUT_SIZE)
      {
         ret = tts_add_text(tts, txt, NULL, TTS_VOICE_TYPE_AUTO,
@@ -66,14 +68,14 @@ static Eina_Bool _text_add(const char *txt)
      }
    else
      {
-        char tmp[TEXT_CUT_SIZE + 2];
+        char tmp[TEXT_CUT_SIZE + 1];
         int i, p = 0;
 
         while (strlen(&txt[p]) > TEXT_CUT_SIZE)
           {
              strncpy(tmp, &txt[p], TEXT_CUT_SIZE);
 
-             for (i = 1; i < TEXT_CUT_SIZE ; i++)
+             for (i = 1; i < TEXT_CUT_SIZE - 1 ; i++)
                {
                   if (tmp[i] == ' ' &&
                       (tmp[i - 1] == '?' ||
@@ -118,7 +120,9 @@ void _tts_state_changed_cb(tts_h tts, tts_state_e previous, tts_state_e current,
         if (!eina_strbuf_length_get(buf)) return;
 
         txt = eina_strbuf_string_steal(buf);
-        if (!txt || strlen(txt) == 0) return;
+        eina_strbuf_free(buf);
+
+        if (txt && strlen(txt) == 0) return;
 
         if (_text_add(txt) == EINA_FALSE) return;
 

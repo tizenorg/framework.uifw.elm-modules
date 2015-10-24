@@ -26,7 +26,7 @@ PKG_CHECK_MODULES(ACCESS_OUTPUT, [${requirements}])
 
 # Check host system
 ELEMENTARY_VERSION=`$PKG_CONFIG --modversion elementary | awk -F . '{printf("%s.%s.%s",$1,$2,$3);}'`
-MODULE_ARCH="$host_os-$host_cpu-$ELEMENTARY_VERSION"
+MODULE_ARCH="v-$ELEMENTARY_VERSION"
 AC_SUBST(MODULE_ARCH)
 AC_DEFINE_UNQUOTED(MODULE_ARCH, "$MODULE_ARCH", "Module architecture")
 

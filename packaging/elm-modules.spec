@@ -1,6 +1,6 @@
 Name:       elm-modules
 Summary:    The Elementary Modules
-Version:    0.1.25
+Version:    0.1.27
 Release:    1
 Group:      System/Libraries
 License:    Flora-1.1
@@ -10,7 +10,6 @@ BuildRequires: elementary-devel, eina-devel, edje-devel
 BuildRequires: tts-devel, libfeedback-devel
 BuildRequires: pkgconfig(mm-keysound)
 BuildRequires: pkgconfig(vconf)
-BuildRequires: model-build-features
 
 %description
 The Elementary Modules
@@ -22,18 +21,7 @@ The Elementary Modules
 export CFLAGS+=" -fvisibility=hidden -fPIC -Wall"
 export LDFLAGS+=" -fvisibility=hidden -Wl,--hash-style=both -Wl,--as-needed -Wl,-z,defs"
 
-%if "%{?tizen_profile_name}" == "wearable"
-    export CFLAGS+=" -DELM_FEATURE_WEARABLE"
-    %if "%{?model_build_feature_formfactor}" == "circle"
-        export CFLAGS+=" -DELM_FEATURE_WEARABLE_CIRCLE"
-    %else
-        export CFLAGS+=" -DELM_FEATURE_WEARABLE_RECTANGLE"
-    %endif
-%else
-    export CFLAGS+=" -DELM_FEATURE_LITE"
-%endif
-
-%define DEF_SUBDIRS access_output_tts edje_feedback naviframe_effect
+%define DEF_SUBDIRS access_output_tts edje_feedback
 for FILE in %{DEF_SUBDIRS}
 do
     cd $FILE

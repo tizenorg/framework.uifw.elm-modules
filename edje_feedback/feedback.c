@@ -17,6 +17,7 @@
 #include <eina_module.h>
 #include <Edje.h>
 #include <feedback.h>
+#include <feedback-internal.h>
 
 static int _edje_feedback_log_dom = -1;
 static int _init_count = 0;
@@ -50,7 +51,7 @@ static Eina_Bool _init_feedback = EINA_FALSE;
 extern "C" {
 #endif
 
-EAPI Eina_Bool
+EXPORTAPI Eina_Bool
 edje_plugin_run(Evas_Object *edje,
                 const char *name,
                 const char *param)
@@ -82,6 +83,7 @@ edje_plugin_run(Evas_Object *edje,
           }
         return EINA_TRUE;
      }
+   free(tok);
    return EINA_FALSE;
 }
 

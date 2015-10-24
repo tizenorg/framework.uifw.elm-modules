@@ -22,8 +22,8 @@ requirements="eina, edje, feedback"
 PKG_CHECK_MODULES(EDJE_FEEDBACK, [${requirements}])
 
 # Check host system
-VERSION=1.0.0
-MODULE_ARCH="$host_os-$host_cpu-$VERSION"
+VERSION=1.13
+MODULE_ARCH="v-$VERSION"
 AC_SUBST(MODULE_ARCH)
 AC_DEFINE_UNQUOTED(MODULE_ARCH, "$MODULE_ARCH", "Module architecture")
 
